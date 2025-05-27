@@ -473,7 +473,8 @@ export default defineComponent({
           invalidInputValue: 'Invalid input value',
           missingKeyColumn: 'Missing key column',
           noRecordIndicator: 'No record',
-          freezeColumn: 'Freeze Column'
+          freezeColumn: 'Freeze Column',
+          unFreezeColumn: 'UnFreeze Column'
         }
       }
     },

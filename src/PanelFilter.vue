@@ -39,7 +39,7 @@
         </div>
         <div class="panel-action">
           <button class="panel-button float-middle" @click="freezeOrUnFreezeColumn">
-    {{ isSticky ? "UnFreeze Column" : "Freeze Column" }}  
+    {{ isSticky ? localizedLabel.unFreezeColumn : localizedLabel.freezeColumn }}  
   </button>
 
 
@@ -156,6 +156,7 @@ export default {
           listFirstNValuesOnly: n => `List first ${n} values only`,
           apply: 'Apply',
           freezeColumn: 'Freeze Column'
+          unFreezeColumn: 'UnFreeze Column'
         }
       }
     }
