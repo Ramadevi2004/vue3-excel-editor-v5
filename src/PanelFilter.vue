@@ -23,7 +23,7 @@
                 class=""></path>
             </svg> -->
 
-            <span v-html="localizedLabel.sortAscending"/>
+            <span v-html="localizedLabel.sortAscending" />
           </button>
           <button class="panel-button float-right" @click="sort(1)">
             <!-- <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="sort-alpha-up-alt" role="img"
@@ -38,11 +38,12 @@
           </button>
         </div>
         <div class="panel-action">
+          <!-- <button class="panel-button float-middle" @click="freezeOrUnFreezeColumn">
+            {{ isSticky ? localizedLabel.unFreezeColumn : localizedLabel.freezeColumn }}  
+          </button> -->
           <button class="panel-button float-middle" @click="freezeOrUnFreezeColumn">
-    {{ isSticky ? localizedLabel.unFreezeColumn : localizedLabel.freezeColumn }}  
-  </button>
-
-
+            <span v-html="isSticky ? localizedLabel.unFreezeColumn : localizedLabel.freezeColumn"></span>
+          </button>
         </div>
         <div class="panel-action">
           <div>
@@ -68,7 +69,7 @@
             <span class="panel-input-b">
               <input type="text" ref="inputFilter" class="panel-input" :placeholder="localizedLabel.customFilter"
                 :disabled="selectedItems.length > 0" trim autocomplete="off" autocorrect="off" autocapitalize="off"
-                spellcheck="false" @keyup="doInputFilter" @keydown.exact.enter="doFilter"  />
+                spellcheck="false" @keyup="doInputFilter" @keydown.exact.enter="doFilter" />
             </span>
           </div>
         </div>
@@ -76,18 +77,13 @@
         <div>
           <div ref="panelList" class="panel-list">
             <div class="panel-list-item">
-              <label >
+              <label>
                 <div>
-                  <input
-                    type="checkbox"
-                    class="panel-checkbox"
-                    v-model="selectAll"
-                    @change="toggleSelectAll"
-                  />
+                  <input type="checkbox" class="panel-checkbox" v-model="selectAll" @change="toggleSelectAll" />
                   Select All
                 </div>
               </label>
-              
+
             </div>
             <div v-for="(item, k) in filteredSortedUniqueValueList.slice(0, nFilterCount)" :key="k"
               class="panel-list-item">
@@ -96,7 +92,8 @@
               <!-- <label :for="'checkbox-'+k">{{ item }}</label> -->
               <label>
                 <div>
-                  <input type="checkbox" class="panel-checkbox" :value="item" v-model="selectedItems" @change="checkSelectAll"/>
+                  <input type="checkbox" class="panel-checkbox" :value="item" v-model="selectedItems"
+                    @change="checkSelectAll" />
                   <!-- <input type="checkbox" class="panel-checkbox" :value="item" v-model="selectedItems" :checked="selectedItems.includes(item)" /> -->
                   <!-- <input
                     type="checkbox"
