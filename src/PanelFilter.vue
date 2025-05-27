@@ -38,6 +38,13 @@
           </button>
         </div>
         <div class="panel-action">
+          <button class="panel-button float-middle" @click="freezeOrUnFreezeColumn">
+    {{ isSticky ? "UnFreeze Column" : "Freeze Column" }}  
+  </button>
+
+
+        </div>
+        <div class="panel-action">
           <div>
             <button class="panel-input-button" @click="showDropdown = !showDropdown">{{ symbol }}</button>
             <div :class="{ show: showDropdown }" class="panel-dropdown">
@@ -61,13 +68,27 @@
             <span class="panel-input-b">
               <input type="text" ref="inputFilter" class="panel-input" :placeholder="localizedLabel.customFilter"
                 :disabled="selectedItems.length > 0" trim autocomplete="off" autocorrect="off" autocapitalize="off"
-                spellcheck="false" @keyup="doInputFilter" @keydown.exact.enter="doFilter" />
+                spellcheck="false" @keyup="doInputFilter" @keydown.exact.enter="doFilter"  />
             </span>
           </div>
         </div>
 
         <div>
           <div ref="panelList" class="panel-list">
+            <div class="panel-list-item">
+              <label >
+                <div>
+                  <input
+                    type="checkbox"
+                    class="panel-checkbox"
+                    v-model="selectAll"
+                    @change="toggleSelectAll"
+                  />
+                  Select All
+                </div>
+              </label>
+              
+            </div>
             <div v-for="(item, k) in filteredSortedUniqueValueList.slice(0, nFilterCount)" :key="k"
               class="panel-list-item">
               <!-- <input type="checkbox" class="panel-checkbox" :id="'checkbox-'+k" :value="item" v-model="selectedItems" /> -->
@@ -75,7 +96,15 @@
               <!-- <label :for="'checkbox-'+k">{{ item }}</label> -->
               <label>
                 <div>
-                  <input type="checkbox" class="panel-checkbox" :value="item" v-model="selectedItems" />
+                  <input type="checkbox" class="panel-checkbox" :value="item" v-model="selectedItems" @change="checkSelectAll"/>
+                  <!-- <input type="checkbox" class="panel-checkbox" :value="item" v-model="selectedItems" :checked="selectedItems.includes(item)" /> -->
+                  <!-- <input
+                    type="checkbox"
+                    class="panel-checkbox"
+                    :value="item"
+                    :checked="selectedItems.includes(item)"
+                    @change="updateSelectedList(item, $event.target.checked)"
+                  /> -->
                   {{ item }}
                 </div>
               </label>
@@ -125,7 +154,8 @@ export default {
           regularExpression: '~ Regular Expression',
           customFilter: 'Custom Filter',
           listFirstNValuesOnly: n => `List first ${n} values only`,
-          apply: 'Apply'
+          apply: 'Apply',
+          freezeColumn: 'Freeze Column'
         }
       }
     }
@@ -139,14 +169,36 @@ export default {
       inputFilter: '',
       inputFilterCondition: '',
       sortedUniqueValueList: [],
-      selectedItems: [] 
+      selectedItems: [],
+      selectAll: false,
+      isSticky:false
     }
   },
   computed: {
+    // filteredSortedUniqueValueList() {
+    //   console.log("input filter selected",this.inputFilterCondition);
+    //   const filter = this.inputFilter.toUpperCase()
+    //   return this.sortedUniqueValueList.filter(item => item.toUpperCase().includes(filter))
+    // },
     filteredSortedUniqueValueList() {
-      const filter = this.inputFilter.toUpperCase()
-      return this.sortedUniqueValueList.filter(item => item.toUpperCase().startsWith(filter))
-    },
+    const filter = this.inputFilter.toUpperCase();
+    const condition = this.inputFilterCondition; // Store the selected filter condition
+
+    return this.sortedUniqueValueList.filter(item => {
+      if (!filter) return true; // Show everything if no input exists
+      if (condition === "=") return item == filter; // Exact match
+      if (condition === "<") return parseFloat(item) < parseFloat(filter); // Less than
+      if (condition === "<=") return parseFloat(item) <= parseFloat(filter); // Less than or equal to
+      if (condition === ">") return parseFloat(item) > parseFloat(filter); // Greater than
+      if (condition === ">=") return parseFloat(item) >= parseFloat(filter); // Greater than or equal to
+      if (condition === "<>") return item != filter; // Not match
+      if (condition === "~") return new RegExp(filter).test(item); // Regular Expression match
+
+      return item.toUpperCase().includes(filter.toUpperCase()); // Default: Partial match
+    });
+  },
+
+
     symbol() {
       switch (this.inputFilterCondition) {
         case '': return '≒'
@@ -158,12 +210,29 @@ export default {
     },
   },
   methods: {
+    toggleSelectAll() {
+    if (this.selectAll) {
+      this.selectedItems = [...this.sortedUniqueValueList]; // Select all items
+    } else {
+      this.selectedItems = []; // Deselect all items
+    }
+  },
+    checkSelectAll() {
+      // If any checkbox is unchecked, deselect "Select All"
+      this.selectAll = this.selectedItems.length === this.filteredSortedUniqueValueList.length;
+    },
+
+
     clickOutside(e) {
       if (e.target.id === 'panelModal') this.hidePanel()
     },
     sort(direction) {
       this.hidePanel()
       this.$parent.sort(direction, this.columnFilterRef.colPos)
+    },
+    freezeOrUnFreezeColumn(){
+      this.hidePanel()
+      this.$parent.freezeOrUnFreezeColumn(this.columnFilterRef.colPos);
     },
     setFilterCondition(choice) {
       this.showDropdown = false
@@ -172,7 +241,9 @@ export default {
     },
     freezePanelSizeAfterShown() {
       const target = this.$refs.panelList
+      console.log("target",target);
       const rect = target.getBoundingClientRect()
+      console.log("Rect",rect);
       target.setAttribute('style', `width:${rect.width}px; height:${rect.height}px;`)
     },
     removePanelSizeAfterHide() {
@@ -219,8 +290,8 @@ export default {
     doFilter() {
       if (this.selectedItems.length > 0) {
         // Create a special format that the parent component will recognize
+        console.log("selected items",this.selectedItems);
         const opt = `in:${this.selectedItems.join(',')}`
-
         // Display the selected items in the UI
         this.columnFilterRef.$el.textContent = this.selectedItems.join(', ')
 
@@ -240,37 +311,55 @@ export default {
       // 🔥 Optional: no longer used directly for single select
     },
     showPanel(ref) {
+      console.log("selected items",this.selectedItems);
       this.columnFilterRef = ref
       this.inputFilter = ''
       this.inputFilterCondition = ''
-      this.selectedItems = [] 
+      // this.selectedItems = [] 
       this.sortedUniqueValueList = []
       this.$refs.inputFilter.value = ''
-      if (this.columnFilterRef.$el.textContent !== '') {
-        this.columnFilterRef.$el.textContent = ''
-        this.columnFilterRef.$emit('update:modelValue', '')
-        this.$parent.calTable()
-      }
+      this.isSticky =  this.$parent.isSticky(this.columnFilterRef.colPos);
+      this.$parent.focused = false;
+      // if (this.columnFilterRef.$el.textContent !== '') {
+      //   console.log(this.columnFilterRef.$el.textContent);
+      //   this.columnFilterRef.$el.textContent = ''
+      //   this.columnFilterRef.$emit('update:modelValue', '')
+      //   this.$parent.calTable()
+      // }
       setTimeout(() => {
         this.show = true
         setTimeout(() => (this.$refs.inputFilter.focus()))
 
         const hash = {}
         const fieldName = this.$parent.fields[ref.colPos].name
-        this.$parent.table.forEach(record => (hash[record[fieldName]] = true))
+        // this.$parent.table.forEach(record => (hash[record[fieldName]] = true))
+        this.$parent.modelValue.forEach(record => (hash[record[fieldName]] = true))
+
         const keys = Object.keys(hash)
-        keys.sort()
+        // keys.sort()
+        keys.sort((a, b) => {
+      const aSelected = this.selectedItems.includes(a);
+      const bSelected = this.selectedItems.includes(b);
+      
+      if (aSelected && !bSelected) return -1; // Selected comes first
+      if (!aSelected && bSelected) return 1;  // Unselected comes later
+      return a.localeCompare(b); // Sort remaining items alphabetically
+    });
         if (keys.length > 0 && keys[0] === '') keys[0] = ' '
         this.sortedUniqueValueList = keys
+        console.log("field name",fieldName);
+        console.log("keys",keys);
+        // this.selectedItems = [...this.filteredSortedUniqueValueList]; // Pre-select items
         setTimeout(() => this.freezePanelSizeAfterShown())
       })
     },
     hidePanel() {
       this.show = false
+      this.$parent.focused = true;
       this.removePanelSizeAfterHide()
       setTimeout(() => {
         this.sortedUniqueValueList = []
-        this.selectedItems = []
+        // this.selectedItems = []
       }, 0)
     }
   }
@@ -363,7 +452,7 @@ div.panel-title span, button.panel-button span {
   padding: 0.6rem;
   width: calc(100% - 2.2rem);
   font-size: 0.88rem;
-  background-color: transparent;
+  background-color: transparent
 }
 .panel-input-button {
   border-top-left-radius: 4px;
@@ -433,6 +522,11 @@ div.panel-title span, button.panel-button span {
 
 .float-right {
   float: right !important;
+}
+.float-middle {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .panel-list {
