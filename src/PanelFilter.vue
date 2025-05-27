@@ -152,7 +152,7 @@ export default {
           customFilter: 'Custom Filter',
           listFirstNValuesOnly: n => `List first ${n} values only`,
           apply: 'Apply',
-          freezeColumn: 'Freeze Column'
+          freezeColumn: 'Freeze Column',
           unFreezeColumn: 'UnFreeze Column'
         }
       }
