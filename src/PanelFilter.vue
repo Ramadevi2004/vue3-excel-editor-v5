@@ -42,7 +42,7 @@
             {{ isSticky ? localizedLabel.unFreezeColumn : localizedLabel.freezeColumn }}  
           </button> -->
           <button class="panel-button float-middle" @click="freezeOrUnFreezeColumn">
-            <span v-html="isSticky ? localizedLabel.unFreezeColumn : localizedLabel.freezeColumn"></span>
+            <span  style="color: black;"   v-html="isSticky ? localizedLabel.unFreezeColumn : localizedLabel.freezeColumn"></span>
           </button>
         </div>
         <div class="panel-action">
