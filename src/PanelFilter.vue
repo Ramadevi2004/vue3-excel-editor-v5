@@ -39,11 +39,20 @@
         </div>
         <div class="panel-action">
           <!-- <button class="panel-button float-middle" @click="freezeOrUnFreezeColumn">
+<<<<<<< HEAD
             {{ isSticky ? localizedLabel.unFreezeColumn : localizedLabel.freezeColumn }}  
           </button> -->
           <button class="panel-button float-middle" @click="freezeOrUnFreezeColumn">
             <span  style="color: black;"   v-html="isSticky ? localizedLabel.unFreezeColumn : localizedLabel.freezeColumn"></span>
           </button>
+=======
+    {{ isSticky ? "UnFreeze Column" : localizedLabel.freezeColumn }}  
+  </button> -->
+        <button class="panel-button float-middle" @click="freezeOrUnFreezeColumn">
+            <span  v-html="isSticky ? localizedLabel.unFreezeColumn : localizedLabel.freezeColumn"></span>
+        </button>
+
+>>>>>>> 76eee5c (fixed filter issues)
         </div>
         <div class="panel-action">
           <div>
@@ -67,9 +76,23 @@
                   v-html="localizedLabel.regularExpression" /></div>
             </div>
             <span class="panel-input-b">
-              <input type="text" ref="inputFilter" class="panel-input" :placeholder="localizedLabel.customFilter"
+              <!-- <input type="text" ref="inputFilter" class="panel-input" :placeholder="localizedLabel.customFilter"
                 :disabled="selectedItems.length > 0" trim autocomplete="off" autocorrect="off" autocapitalize="off"
-                spellcheck="false" @keyup="doInputFilter" @keydown.exact.enter="doFilter" />
+                spellcheck="false" @keyup="doInputFilter" @keydown.exact.enter="doFilter"  /> -->
+                <input 
+                  type="text" 
+                  ref="inputFilter" 
+                  class="panel-input" 
+                  :placeholder="localizedLabel.customFilter"
+                  :disabled="!this.sortedUniqueValueList.length"
+                  trim 
+                  autocomplete="off" 
+                  autocorrect="off" 
+                  autocapitalize="off"
+                  spellcheck="false" 
+                  @keyup="doInputFilter" 
+                  @keydown.exact.enter="doFilter" 
+                />
             </span>
           </div>
         </div>
@@ -77,6 +100,7 @@
         <div>
           <div ref="panelList" class="panel-list">
             <div class="panel-list-item">
+<<<<<<< HEAD
               <label>
                 <div>
                   <input type="checkbox" class="panel-checkbox" v-model="selectAll" @change="toggleSelectAll" />
@@ -84,6 +108,20 @@
                 </div>
               </label>
 
+=======
+              <label >
+                <div>
+                  <input
+                    type="checkbox"
+                    class="panel-checkbox"
+                    v-model="selectAll"
+                    @change="toggleSelectAll"
+                  />
+                  Select All
+                </div>
+              </label>
+              
+>>>>>>> 76eee5c (fixed filter issues)
             </div>
             <div v-for="(item, k) in filteredSortedUniqueValueList.slice(0, nFilterCount)" :key="k"
               class="panel-list-item">
@@ -92,8 +130,12 @@
               <!-- <label :for="'checkbox-'+k">{{ item }}</label> -->
               <label>
                 <div>
+<<<<<<< HEAD
                   <input type="checkbox" class="panel-checkbox" :value="item" v-model="selectedItems"
                     @change="checkSelectAll" />
+=======
+                  <input type="checkbox" class="panel-checkbox" :value="item" v-model="selectedItems" @change="checkSelectAll"/>
+>>>>>>> 76eee5c (fixed filter issues)
                   <!-- <input type="checkbox" class="panel-checkbox" :value="item" v-model="selectedItems" :checked="selectedItems.includes(item)" /> -->
                   <!-- <input
                     type="checkbox"
@@ -172,6 +214,17 @@ export default {
       isSticky:false
     }
   },
+  watch: {
+    '$parent.columnFilter': {
+      handler(newValue) {
+        if (Object.keys(newValue).length === 0) {
+          this.selectedItems = [];
+        }
+      },
+      deep: true
+    }
+  },
+
   computed: {
     // filteredSortedUniqueValueList() {
     //   console.log("input filter selected",this.inputFilterCondition);
@@ -179,7 +232,12 @@ export default {
     //   return this.sortedUniqueValueList.filter(item => item.toUpperCase().includes(filter))
     // },
     filteredSortedUniqueValueList() {
+<<<<<<< HEAD
     const filter = this.inputFilter.toUpperCase();
+=======
+    // const filter = this.inputFilter.toUpperCase();
+    const filter = this.inputFilter;
+>>>>>>> 76eee5c (fixed filter issues)
     const condition = this.inputFilterCondition; // Store the selected filter condition
 
     return this.sortedUniqueValueList.filter(item => {
@@ -193,6 +251,10 @@ export default {
       if (condition === "~") return new RegExp(filter).test(item); // Regular Expression match
 
       return item.toUpperCase().includes(filter.toUpperCase()); // Default: Partial match
+<<<<<<< HEAD
+=======
+      // return item.includes(filter.trim());
+>>>>>>> 76eee5c (fixed filter issues)
     });
   },
 
@@ -288,7 +350,11 @@ export default {
     doFilter() {
       if (this.selectedItems.length > 0) {
         // Create a special format that the parent component will recognize
+<<<<<<< HEAD
         console.log("selected items",this.selectedItems);
+=======
+        // console.log("selected items",this.selectedItems);
+>>>>>>> 76eee5c (fixed filter issues)
         const opt = `in:${this.selectedItems.join(',')}`
         // Display the selected items in the UI
         this.columnFilterRef.$el.textContent = this.selectedItems.join(', ')
@@ -309,7 +375,11 @@ export default {
       // 🔥 Optional: no longer used directly for single select
     },
     showPanel(ref) {
+<<<<<<< HEAD
       console.log("selected items",this.selectedItems);
+=======
+      // console.log("selected items",this.selectedItems);
+>>>>>>> 76eee5c (fixed filter issues)
       this.columnFilterRef = ref
       this.inputFilter = ''
       this.inputFilterCondition = ''
@@ -332,7 +402,12 @@ export default {
         const fieldName = this.$parent.fields[ref.colPos].name
         // this.$parent.table.forEach(record => (hash[record[fieldName]] = true))
         this.$parent.modelValue.forEach(record => (hash[record[fieldName]] = true))
+<<<<<<< HEAD
 
+=======
+        // this.$parent.modelValue.forEach(record => (hash[record[fieldName]?.trim()] = true));
+        // console.log("modelvalue",this.$parent.modelValue);
+>>>>>>> 76eee5c (fixed filter issues)
         const keys = Object.keys(hash)
         // keys.sort()
         keys.sort((a, b) => {
@@ -345,8 +420,13 @@ export default {
     });
         if (keys.length > 0 && keys[0] === '') keys[0] = ' '
         this.sortedUniqueValueList = keys
+<<<<<<< HEAD
         console.log("field name",fieldName);
         console.log("keys",keys);
+=======
+        // console.log("field name",fieldName);
+        // console.log("keys",keys);
+>>>>>>> 76eee5c (fixed filter issues)
         // this.selectedItems = [...this.filteredSortedUniqueValueList]; // Pre-select items
         setTimeout(() => this.freezePanelSizeAfterShown())
       })

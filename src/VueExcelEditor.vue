@@ -1,6 +1,9 @@
+<<<<<<< HEAD
 VueExcelEditor.vue
 
 
+=======
+>>>>>>> 76eee5c (fixed filter issues)
 
 <template>
   <div ref="editor" class="vue-excel-editor" :style="{display: 'inline-block', width}">
@@ -1583,7 +1586,11 @@ export default defineComponent({
     /* *** Window Event *******************************************************************************************
      */
     tableScroll () {
+<<<<<<< HEAD
       console.log("table scroll")
+=======
+      // console.log("table scroll")
+>>>>>>> 76eee5c (fixed filter issues)
       this.showDatePicker = false
       this.autocompleteInputs = []
       if (this.focused && this.currentField)
@@ -2041,8 +2048,13 @@ export default defineComponent({
       const colPos = typeof pos === 'undefined' ? this.columnFilterRef.colPos : pos
       const field = this.fields[colPos]
       let beforeField = null
+<<<<<<< HEAD
       console.log(typeof(field))
       console.log(this.fields.length);
+=======
+      // console.log(typeof(field))
+      // console.log(this.fields.length);
+>>>>>>> 76eee5c (fixed filter issues)
       for(let i=0;i<=colPos;i++){
           beforeField = this.fields[i];
           beforeField.sticky = (field.sticky)?false:true;
@@ -2228,13 +2240,21 @@ export default defineComponent({
     settingClick() {
       if (!this.disablePanelSetting)
         this.$refs.panelSetting.showPanel();
+<<<<<<< HEAD
       console.log("hello");
+=======
+      // console.log("hello");
+>>>>>>> 76eee5c (fixed filter issues)
     },
 
     panelFilterClick(item) {
       if (!this.disablePanelFilter)
         this.$refs.panelFilter.showPanel(this.$refs[`filter-${item.name}`][0]);
+<<<<<<< HEAD
       console.log("panelFilterClick")
+=======
+      // console.log("panelFilterClick")
+>>>>>>> 76eee5c (fixed filter issues)
     },
 
     /* *** Import/Export ************************************************************************************
@@ -2488,7 +2508,11 @@ export default defineComponent({
       this.prevSelect = rowPos
     },
     selectAllClick () {
+<<<<<<< HEAD
       console.log("selected count");
+=======
+      // console.log("selected count");
+>>>>>>> 76eee5c (fixed filter issues)
       this.toggleSelectAllRecords()
     },
     reviseSelectedAfterTableChange () {
@@ -2540,7 +2564,11 @@ export default defineComponent({
     },
     toggleSelectAllRecords (e) {
       if (e) e.preventDefault()
+<<<<<<< HEAD
       console.log(this.selectedCount);
+=======
+      // console.log(this.selectedCount);
+>>>>>>> 76eee5c (fixed filter issues)
       if (this.selectedCount > 0)
         this.clearAllSelected()
       else {
@@ -2640,7 +2668,11 @@ export default defineComponent({
     moveSouth () {
       if (this.focused) {
         // if (this.currentRowPos + 1 >= this.table.length) {
+<<<<<<< HEAD
         console.log("south")
+=======
+        // console.log("south")
+>>>>>>> 76eee5c (fixed filter issues)
         if (this.currentRowPos+1 >= (this.pageBottom - this.pageTop) && this.pageBottom >= this.table.length) {
           if (this.readonly) return false
           if (!this.newIfBottom) return false
@@ -2754,7 +2786,11 @@ export default defineComponent({
     cellMouseOver(fieldName, e) {
       // console.log(fieldName);
       const cell = e.target;
+<<<<<<< HEAD
       let cellText = cell.innerHTML || "Default TextTip Content";
+=======
+      let cellText = cell.innerHTML;
+>>>>>>> 76eee5c (fixed filter issues)
       if (fieldName === "Data Dictionary Product Name") {
         cellText = cellText.split(",").map(item => item.trim()).join("<br>"); // Splitting by comma and adding line breaks
       }
@@ -2762,6 +2798,10 @@ export default defineComponent({
       const rect = cell.getBoundingClientRect();
       this.$refs.texttip.style.top = (rect.top - 14) + "px";
       this.$refs.texttip.style.left = (rect.right + 8) + "px";
+<<<<<<< HEAD
+=======
+      if(cellText)
+>>>>>>> 76eee5c (fixed filter issues)
       this.$refs.texttip.style.display = "block"; // Ensure tooltip is visible
       cell.addEventListener("mouseout", this.cellMouseOut);
     },
@@ -2883,7 +2923,11 @@ export default defineComponent({
       return true
     },
     inputSquareClick () {
+<<<<<<< HEAD
       console.log("input square clicked")
+=======
+      // console.log("input square clicked")
+>>>>>>> 76eee5c (fixed filter issues)
       if (!this.currentField.readonly && !this.inputBoxShow && this.currentField.type !== 'select') {
         this.inputBox.value = this.currentCell.textContent
         this.inputBoxShow = 1
@@ -3256,9 +3300,15 @@ export default defineComponent({
             // console.log("ends with funciton");
             // console.log(field.options);
             if (field.options.constructor.name.endsWith('Function')) {
+<<<<<<< HEAD
               console.log("ends with funciton");
               list = await field.options(value, this.currentRecord)
               console.log("list",list);
+=======
+              // console.log("ends with funciton");
+              list = await field.options(value, this.currentRecord)
+              // console.log("list",list);
+>>>>>>> 76eee5c (fixed filter issues)
               if (field.type === 'map') list = Object.values(list)
               else list = list.slice()
               if (this.inputBoxShow)
@@ -3290,7 +3340,11 @@ export default defineComponent({
               
             }
             else if (Object.values(field.options).length > 0) {
+<<<<<<< HEAD
               console.log("else if")
+=======
+              // console.log("else if")
+>>>>>>> 76eee5c (fixed filter issues)
               list = field.options
               if (field.type === 'map') list = Object.values(list)
               else list = list.slice()
@@ -3309,12 +3363,21 @@ export default defineComponent({
               // }
 
               if (this.currentField.type === 'multiselect') {
+<<<<<<< HEAD
                 console.log("list",list);
                 const delimiter = this.currentField.delimiter || ',';
                 const selectedValues = (this.inputBox.value || '').split(delimiter).map(v => v.trim());
                 console.log(selectedValues);
                 this.selectedItemsForAutocomplete = selectedValues;
                 console.log("intiasing selectedItemsForAutocomplete")
+=======
+                // console.log("list",list);
+                const delimiter = this.currentField.delimiter || ',';
+                const selectedValues = (this.inputBox.value || '').split(delimiter).map(v => v.trim());
+                // console.log(selectedValues);
+                this.selectedItemsForAutocomplete = selectedValues;
+                // console.log("intiasing selectedItemsForAutocomplete")
+>>>>>>> 76eee5c (fixed filter issues)
                 list.sort((a, b) => {
                   const isASelected = this.selectedItemsForAutocomplete.includes(a);
                   const isBSelected = this.selectedItemsForAutocomplete.includes(b);
@@ -3399,63 +3462,63 @@ export default defineComponent({
 
     inputAutocompleteText(text, e) {
        if (e) {
-    e.preventDefault();
-    e.stopPropagation();
-  }
+        e.preventDefault();
+        e.stopPropagation();
+      }
 
-  // Special handling for multiselect type
-  if (this.currentField && this.currentField.type === 'multiselect') {
-    // Don't close the dropdown for multiselect - this is the key fix!
-    // Instead, toggle the selected item
+      // Special handling for multiselect type
+      if (this.currentField && this.currentField.type === 'multiselect') {
+        // Don't close the dropdown for multiselect - this is the key fix!
+        // Instead, toggle the selected item
 
-    const delimiter = this.currentField.delimiter || ',';
+        const delimiter = this.currentField.delimiter || ',';
 
-    // Get the current value and split it into array of selected items
-    let currentValue = this.inputBox.value || '';
-    let selectedItems = currentValue
-      .split(delimiter)
-      .map(item => item.trim())
-      .filter(item => item.length > 0);
+        // Get the current value and split it into array of selected items
+        let currentValue = this.inputBox.value || '';
+        let selectedItems = currentValue
+          .split(delimiter)
+          .map(item => item.trim())
+          .filter(item => item.length > 0);
 
-    // Check if the item is already selected
-    const existingIndex = selectedItems.findIndex(item =>
-      item.toLowerCase() === text.toLowerCase()
-    );
+        // Check if the item is already selected
+        const existingIndex = selectedItems.findIndex(item =>
+          item.toLowerCase() === text.toLowerCase()
+        );
 
-    // If already selected, remove it; otherwise add it
-    if (existingIndex !== -1) {
-      selectedItems.splice(existingIndex, 1);
-    } else {
-      selectedItems.push(text);
-    }
+        // If already selected, remove it; otherwise add it
+        if (existingIndex !== -1) {
+          selectedItems.splice(existingIndex, 1);
+        } else {
+          selectedItems.push(text);
+        }
 
-    // Update the input value with the new selection
-    this.inputBox.value = selectedItems.join(delimiter + ' ');
+        // Update the input value with the new selection
+        this.inputBox.value = selectedItems.join(delimiter + ' ');
 
-    // Keep the input box focused
-    this.inputBoxChanged = true;
-    if (this.$refs.input) {
-      this.$refs.input.focus();
-    }
+        // Keep the input box focused
+        this.inputBoxChanged = true;
+        if (this.$refs.input) {
+          this.$refs.input.focus();
+        }
 
-    // Critical fix: DO NOT close the dropdown, instead refresh it
-    this.calAutocompleteList(true);
-    
-    // Make sure the dropdown stays visible
-    this.inputBoxShow = true;
-    this.focused = true;
-    
-    return; // Important! Return early to avoid closing the dropdown
-  } else {
-    // Original behavior for non-multiselect fields
-    this.autocompleteInputs = [];
-    this.autocompleteSelect = -1;
-    this.inputBoxShow = 0;
-    this.inputBoxChanged = false;
-    setTimeout(() => {
-      this.inputCellWrite(text);
-    });
-  }
+        // Critical fix: DO NOT close the dropdown, instead refresh it
+        this.calAutocompleteList(true);
+        
+        // Make sure the dropdown stays visible
+        this.inputBoxShow = true;
+        this.focused = true;
+        
+        return; // Important! Return early to avoid closing the dropdown
+      } else {
+        // Original behavior for non-multiselect fields
+        this.autocompleteInputs = [];
+        this.autocompleteSelect = -1;
+        this.inputBoxShow = 0;
+        this.inputBoxChanged = false;
+        setTimeout(() => {
+          this.inputCellWrite(text);
+        });
+      }
     },
     
     isItemSelected(item) {
@@ -3472,7 +3535,7 @@ export default defineComponent({
     },
     // Toggle selection of a multiselect item
     toggleMultiselectItem(item) {
-      console.log('toggleMultiselectItem called with:', item);
+      // console.log('toggleMultiselectItem called with:', item);
       // if (!this.currentField || this.currentField.type !== 'multiselect') return;
       if (!this.currentField || this.currentField.type !== 'multiselect') {
         console.log('Not a multiselect field');
@@ -3523,7 +3586,7 @@ export default defineComponent({
     e.preventDefault();
     e.stopPropagation();
   }
-      console.log('applyMultiselectChoices called');
+      // console.log('applyMultiselectChoices called');
       
       if (!this.currentField || this.currentField.type !== 'multiselect') return;
       
@@ -3557,7 +3620,7 @@ export default defineComponent({
 },
     // Clear all multiselect choices
     clearMultiselectChoices() {
-      console.log('clearMultiselectChoices called');
+      // console.log('clearMultiselectChoices called');
       
       if (!this.currentField || this.currentField.type !== 'multiselect') return;
       
@@ -3656,7 +3719,7 @@ export default defineComponent({
   //   this.updateInputBoxValue(); // Call further logic if needed
   // },
   handleCheckboxClick(event) {
-    console.log('Checkbox was clicked:', event.target.value);
+    // console.log('Checkbox was clicked:', event.target.value);
     
     // Maintain focused state to ensure the dropdown remains open
     this.focused = true;
@@ -3676,15 +3739,20 @@ export default defineComponent({
     if (this.currentField.type === 'multiselect') {
       // this.inputBox.value = this.selectedItemsForAutocomplete.join(', ');
       this.$refs.inputBox.value = this.selectedItemsForAutocomplete.join(', ');
-      console.log(this.selectedItemsForAutocomplete);
-      console.log('Updated input box value:', this.inputBox.value); // Another verification method
+      // console.log(this.selectedItemsForAutocomplete);
+      // console.log('Updated input box value:', this.inputBox.value); // Another verification method
     }
   },
     updateDisplayedItems() {
   // This triggers reactivity, and the cell will update automatically
   this.focused = true; // Maintain focus based on interactions
+<<<<<<< HEAD
   console.log("selctedItemsForAutocomplete");
   console.log(this.selectedItemsForAutocomplete);
+=======
+  // console.log("selctedItemsForAutocomplete");
+  // console.log(this.selectedItemsForAutocomplete);
+>>>>>>> 76eee5c (fixed filter issues)
 
   
   // Check if selectedItemsForAutocomplete is not empty before joining
